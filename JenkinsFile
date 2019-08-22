@@ -22,5 +22,4 @@ node {
       sh 'mvn test -Dpublish'
       junit '**/target/surefire-reports/*.xml'
   }
-  
 }

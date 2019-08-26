@@ -1,29 +1,37 @@
-node {
+pipeline {
   agent any
   tools {
-      maven 'Jenkins Maven'
+    maven "Maven"
   }
-  stage("Checkout scm") {
-     checkout scm
-  }
-  stage("Build") {
-      snDevOpsStep '8bc34a2bdbd3330070a8ff9dbf9619be'
-      sh 'mvn clean install'
-  }
-  stage("Test") {
-      snDevOpsStep '0fc34a2bdbd3330070a8ff9dbf9619be'
-      sh 'mvn test -Dpublish'
-      junit '**/target/surefire-reports/*.xml'
-  }
-  stage("UAT Test") {
-      snDevOpsStep '8fc34a2bdbd3330070a8ff9dbf9619be'
-      echo "UAT Testing"
-      sh 'mvn test -Dpublish'
-      junit '**/target/surefire-reports/*.xml'
-  }
-  stage("Deploy") {
-      snDevOpsStep '83c34a2bdbd3330070a8ff9dbf9619be'
-      sh 'mvn test -Dpublish'
-      junit '**/target/surefire-reports/*.xml'
+  stages {
+      stage("Build") {
+          steps {
+              echo "Building"
+              snDevOpsStep '8bc34a2bdbd3330070a8ff9dbf9619be'
+              sh 'mvn clean install'
+          }
+      }
+      stage("Test") {
+           steps {
+                snDevOpsStep '0fc34a2bdbd3330070a8ff9dbf9619be'
+                sh 'mvn test -Dpublish'
+                junit '**/target/surefire-reports/*.xml'
+           }
+       }
+       stage("UAT Test") {
+           steps {
+                snDevOpsStep '8fc34a2bdbd3330070a8ff9dbf9619be'
+                echo "UAT Testing"
+                sh 'mvn test -Dpublish'
+                junit '**/target/surefire-reports/*.xml'
+           }
+       }
+      stage("Deploy") {
+          steps {
+            snDevOpsStep '83c34a2bdbd3330070a8ff9dbf9619be'
+            sh 'mvn test -Dpublish'
+            junit '**/target/surefire-reports/*.xml'
+          }
+      }
   }
 }
